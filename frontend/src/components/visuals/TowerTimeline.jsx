@@ -608,10 +608,10 @@ export default function TowerTimeline({
           zoomControl: false,
         });
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          maxZoom: 20,
-          subdomains: 'abcd',
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> | Rajasthan Police Telecom Forensics',
+        // Tile layer using Esri World Street Map (100% free, no API key required, no watermark, works on file:// and Vercel)
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 19,
+          attribution: 'Tiles &copy; Esri &mdash; Rajasthan Police Telecom Forensics GIS',
         }).addTo(map);
 
         markersGroupRef.current = L.featureGroup().addTo(map);
