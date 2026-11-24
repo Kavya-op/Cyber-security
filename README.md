@@ -8,14 +8,13 @@ A unified, production-ready forensic intelligence platform combining an **Intera
 
 ---
 
-## 🌟 Instant Evaluation: Standalone HTML Prototype
+## 🌟 Instant Evaluation: Self-Contained Single-File HTML Prototype
 
-The prototype is bundled as a self-contained, client-side interactive HTML application in the [`docs/`](./docs) folder:
+The complete platform has been compiled into a **100% self-contained single-file HTML prototype** where all stylesheets, React components, interactive Leaflet maps, Venn visualizers, and case datasets are fully inlined:
 
-- **Option A (Zero-Install Browser):** Visit the deployed GitHub Pages link: [https://kavya-op.github.io/Cyber-security/](https://kavya-op.github.io/Cyber-security/)
-- **Option B (Local Offline):** Clone this repo and double-click [`index.html`](./index.html) or [`docs/index.html`](./docs/index.html) in any modern browser (Chrome, Edge, Firefox, Safari).
-
-All interactive features—GIS Leaflet Map, Multi-Suspect Venn Selector, Suspicious Calling Patterns, Hardware Tracker, IPDR VoIP Correlator, Section 65B Report Generator, and AI Forensic Assistant—work 100% out-of-the-box in standalone mode with embedded baseline datasets.
+- **Option A (Zero-Install Browser URL):** Visit GitHub Pages: [https://kavya-op.github.io/Cyber-security/](https://kavya-op.github.io/Cyber-security/)
+- **Option B (1-File Standalone Prototype):** Double-click [`prototype.html`](./prototype.html) or [`rajasthan_police_forensics_prototype.html`](./rajasthan_police_forensics_prototype.html) in any browser. **No server, no npm, and no asset folders required—just 1 single `.html` file!**
+- **Option C (Action Plan & Wireframe Dossier):** Open [`action_plan_wireframe.html`](./action_plan_wireframe.html) for system wireframes, architectural blueprints, and evaluation action plan.
 
 ---
 
