@@ -279,27 +279,6 @@ export default function TowerTimeline({
     return () => { isMounted = false; };
   }, [data]);
 
-  // Route playback timer effect
-  useEffect(() => {
-    if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setPlaybackIndex(prev => {
-        const activeList = activeFilter === 'IPDR' ? ipdrItems : cdrItems;
-        const maxIdx = Math.max(0, activeList.length - 1);
-        if (prev === null || prev >= maxIdx) {
-          setIsPlaying(false);
-          return maxIdx;
-        }
-        const nextIdx = prev + 1;
-        if (activeList[nextIdx]) {
-          setSelectedEventId(activeList[nextIdx].id);
-        }
-        return nextIdx;
-      });
-    }, 1500 / playbackSpeed);
-    return () => clearInterval(interval);
-  }, [isPlaying, playbackSpeed, activeFilter, ipdrItems, cdrItems]);
-
   // Normalize chronological movement items and correlate IPDR data
   const { cdrItems, ipdrItems, timelineItems } = useMemo(() => {
     const rawCdrList = data.filter(d => d.recordType !== 'IPDR' && (d.cellTowerId || d.towerId));
@@ -462,6 +441,27 @@ export default function TowerTimeline({
     };
   }, [data, ipdrData]);
 
+  // Route playback timer effect
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setPlaybackIndex(prev => {
+        const activeList = activeFilter === 'IPDR' ? ipdrItems : cdrItems;
+        const maxIdx = Math.max(0, activeList.length - 1);
+        if (prev === null || prev >= maxIdx) {
+          setIsPlaying(false);
+          return maxIdx;
+        }
+        const nextIdx = prev + 1;
+        if (activeList[nextIdx]) {
+          setSelectedEventId(activeList[nextIdx].id);
+        }
+        return nextIdx;
+      });
+    }, 1500 / playbackSpeed);
+    return () => clearInterval(interval);
+  }, [isPlaying, playbackSpeed, activeFilter, ipdrItems, cdrItems]);
+
   // Set default selected item
   const selectedEvent = useMemo(() => {
     const activeList = activeFilter === 'IPDR' ? ipdrItems : cdrItems;
@@ -598,20 +598,27 @@ export default function TowerTimeline({
     if (!mapContainerRef.current) return;
 
     if (!leafletMapRef.current) {
-      const map = L.map(mapContainerRef.current, {
-        center: [26.89, 75.80],
-        zoom: 12,
-        zoomControl: false,
-      });
+      if (mapContainerRef.current._leaflet_id) {
+        mapContainerRef.current._leaflet_id = null;
+      }
+      try {
+        const map = L.map(mapContainerRef.current, {
+          center: [26.89, 75.80],
+          zoom: 12,
+          zoomControl: false,
+        });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors | Rajasthan Police Intelligence System',
-      }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors | Rajasthan Police Intelligence System',
+        }).addTo(map);
 
-      markersGroupRef.current = L.featureGroup().addTo(map);
-      pathGroupRef.current = L.featureGroup().addTo(map);
-      leafletMapRef.current = map;
+        markersGroupRef.current = L.featureGroup().addTo(map);
+        pathGroupRef.current = L.featureGroup().addTo(map);
+        leafletMapRef.current = map;
+      } catch (err) {
+        console.warn('Leaflet map initialization warning:', err);
+      }
     }
 
     const map = leafletMapRef.current;
