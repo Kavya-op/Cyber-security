@@ -1,0 +1,395 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * Rajasthan Police Cyber Forensics Workstation Theme
+ * Color Palette:
+ * #171615 - Deep Espresso Noir (Primary text, dark backgrounds, high-priority buttons)
+ * #38312B - Deep Mocha (Secondary dark surfaces, prominent borders, badges)
+ * #655447 - Warm Taupe (Accents, active states, key interactive indicators)
+ * #9A8068 - Khaki Tan (Subtle highlights, metadata, secondary icons)
+ * #CDB69A - Sand Beige (Dividers, borders, card outlines, scrollbar track)
+ * #F1E6D5 - Alabaster Cream (Main canvas, background, light contrast cards)
+ */
+
+@layer base {
+  :root {
+    --color-espresso: #171615;
+    --color-mocha: #38312B;
+    --color-taupe: #655447;
+    --color-khaki: #9A8068;
+    --color-sand: #CDB69A;
+    --color-cream: #F1E6D5;
+  }
+
+  body {
+    background-color: #F1E6D5;
+    color: #171615;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  /* Warm Forensic Workstation Utilities */
+  .neu-extruded,
+  .neu-extruded-sm,
+  .neu-extruded-lg {
+    background: #FAF5EE;
+    border: 1px solid #DECDBA;
+    box-shadow: 0 1px 3px 0 rgba(23, 22, 21, 0.05);
+    border-radius: 0.75rem;
+  }
+
+  .neu-recessed,
+  .neu-recessed-deep {
+    background: #E8DCCB;
+    border: 1px solid #DECDBA;
+    box-shadow: inset 0 1px 2px 0 rgba(23, 22, 21, 0.04);
+    border-radius: 0.75rem;
+  }
+
+  .neu-button {
+    background: #FAF5EE;
+    border: 1px solid #CDB69A;
+    box-shadow: 0 1px 2px 0 rgba(23, 22, 21, 0.04);
+    border-radius: 0.5rem;
+    font-weight: 500;
+    color: #171615;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .neu-button:hover {
+    background: #EFE4D2;
+    border-color: #9A8068;
+  }
+
+  .neu-button:active, .neu-button.active {
+    background: #171615;
+    color: #F1E6D5;
+    border-color: #171615;
+    box-shadow: none;
+  }
+
+  .neu-input {
+    background: #FAF5EE;
+    border: 1px solid #CDB69A;
+    border-radius: 0.5rem;
+    color: #171615;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .neu-input:focus {
+    border-color: #655447;
+    box-shadow: 0 0 0 1px #655447;
+  }
+
+  .neu-pill-warning {
+    background: #38312B;
+    border: 1px solid #655447;
+    color: #F1E6D5;
+    border-radius: 0.375rem;
+  }
+}
+
+/* Palette Themed Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CDB69A;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9A8068;
+}
+
+/* Accessibility: Text Scaling */
+html.text-scale-large {
+  font-size: 112%;
+}
+
+html.text-scale-xlarge {
+  font-size: 124%;
+}
+
+/* Accessibility: Reduced Motion */
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* Accessibility: High Contrast */
+html.high-contrast {
+  filter: contrast(1.15);
+}
+html.high-contrast * {
+  border-color: #171615 !important;
+}
+html.dark.high-contrast * {
+  border-color: #F1E6D5 !important;
+}
+
+/* ============================================================
+   LIGHT MODE PALETTE MAPPINGS (#171615, #38312B, #655447, #9A8068, #CDB69A, #F1E6D5)
+   ============================================================ */
+
+body,
+.bg-slate-50 {
+  background-color: #F1E6D5 !important;
+}
+
+.bg-white {
+  background-color: #FAF5EE !important;
+}
+
+.text-slate-900 {
+  color: #171615 !important;
+}
+
+.text-slate-800 {
+  color: #26211D !important;
+}
+
+.text-slate-700 {
+  color: #38312B !important;
+}
+
+.text-slate-600 {
+  color: #524439 !important;
+}
+
+.text-slate-500 {
+  color: #655447 !important;
+}
+
+.text-slate-400 {
+  color: #9A8068 !important;
+}
+
+.border-slate-200 {
+  border-color: #DECDBA !important;
+}
+
+.border-slate-100 {
+  border-color: #E7DBCC !important;
+}
+
+.border-slate-300 {
+  border-color: #CDB69A !important;
+}
+
+.bg-slate-100 {
+  background-color: #E8DCCB !important;
+}
+
+.bg-slate-200 {
+  background-color: #DECDBA !important;
+}
+
+.bg-slate-900 {
+  background-color: #171615 !important;
+  color: #F1E6D5 !important;
+}
+
+.bg-slate-800 {
+  background-color: #38312B !important;
+  color: #F1E6D5 !important;
+}
+
+.hover\:bg-slate-50:hover {
+  background-color: #EFE4D2 !important;
+}
+
+.hover\:bg-slate-100:hover {
+  background-color: #E2D3BE !important;
+}
+
+.hover\:bg-slate-200:hover {
+  background-color: #D6C3AA !important;
+}
+
+.hover\:bg-slate-800:hover {
+  background-color: #2A2420 !important;
+}
+
+.hover\:bg-slate-900:hover {
+  background-color: #2A2420 !important;
+}
+
+/* Palette Warm Accent Mappings (Replaces Cold Electric Blues) */
+.bg-blue-600 {
+  background-color: #655447 !important;
+  color: #F1E6D5 !important;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: #38312B !important;
+}
+
+.text-blue-600,
+.text-blue-700 {
+  color: #655447 !important;
+}
+
+.border-blue-600 {
+  border-color: #655447 !important;
+}
+
+.bg-blue-50 {
+  background-color: #EADBCE !important;
+}
+
+.border-blue-200 {
+  border-color: #CDB69A !important;
+}
+
+/* ============================================================
+   DARK MODE PALETTE MAPPINGS (#171615, #38312B, #655447, #9A8068, #CDB69A, #F1E6D5)
+   ============================================================ */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body,
+html.dark .bg-slate-50 {
+  background-color: #171615 !important;
+  color: #F1E6D5 !important;
+}
+
+html.dark .bg-white {
+  background-color: #231E1B !important;
+}
+
+html.dark .text-slate-900 {
+  color: #F1E6D5 !important;
+}
+
+html.dark .text-slate-800 {
+  color: #E8DCCB !important;
+}
+
+html.dark .text-slate-700 {
+  color: #DECDBA !important;
+}
+
+html.dark .text-slate-600 {
+  color: #CDB69A !important;
+}
+
+html.dark .text-slate-500 {
+  color: #B5A089 !important;
+}
+
+html.dark .text-slate-400 {
+  color: #9A8068 !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: #38312B !important;
+}
+
+html.dark .border-slate-300 {
+  border-color: #4D423A !important;
+}
+
+html.dark .bg-slate-100 {
+  background-color: #2D2722 !important;
+}
+
+html.dark .bg-slate-200 {
+  background-color: #38312B !important;
+}
+
+html.dark .bg-slate-900 {
+  background-color: #38312B !important;
+  color: #F1E6D5 !important;
+}
+
+html.dark .bg-slate-800 {
+  background-color: #4D423A !important;
+}
+
+html.dark .hover\:bg-slate-50:hover {
+  background-color: #2D2722 !important;
+}
+
+html.dark .hover\:bg-slate-100:hover {
+  background-color: #38312B !important;
+}
+
+html.dark .bg-blue-600 {
+  background-color: #9A8068 !important;
+  color: #171615 !important;
+}
+
+html.dark .hover\:bg-blue-700:hover {
+  background-color: #CDB69A !important;
+}
+
+html.dark .text-blue-600,
+html.dark .text-blue-400,
+html.dark .text-blue-300 {
+  color: #CDB69A !important;
+}
+
+html.dark .border-blue-600 {
+  border-color: #9A8068 !important;
+}
+
+html.dark .bg-blue-50 {
+  background-color: #2D2722 !important;
+}
+
+html.dark .neu-extruded,
+html.dark .neu-extruded-sm,
+html.dark .neu-extruded-lg {
+  background: #231E1B;
+  border: 1px solid #38312B;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+html.dark .neu-recessed,
+html.dark .neu-recessed-deep {
+  background: #171615;
+  border: 1px solid #38312B;
+}
+
+html.dark .neu-button {
+  background: #2D2722;
+  border-color: #4D423A;
+  color: #F1E6D5;
+}
+
+html.dark .neu-button:hover {
+  background: #38312B;
+  border-color: #655447;
+}
+
+html.dark .neu-input {
+  background: #2D2722;
+  border-color: #4D423A;
+  color: #F1E6D5;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #38312B;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #655447;
+}

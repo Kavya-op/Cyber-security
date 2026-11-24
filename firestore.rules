@@ -1,0 +1,107 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HELPER FUNCTIONS & AUTHENTICATION PREDICATES
+    // =========================================================================
+
+    // Validates that request originates from an authenticated officer
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    // String validation with length bounds (prevents DoS and memory exhaustion)
+    function isValidString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    // =========================================================================
+    // DOMAIN VALIDATORS
+    // =========================================================================
+
+    // Section 65B Indian Evidence Act: Forensic Audit Trail Validator
+    function isValidAuditRecord(data) {
+      return data.keys().hasAll(['actionType', 'officer', 'details'])
+        && isValidString(data.actionType, 1, 100)
+        && isValidString(data.officer, 1, 100)
+        && isValidString(data.details, 1, 5000)
+        && (!('role' in data) || (data.role is string && data.role.size() <= 100))
+        && (!('officerName' in data) || (data.officerName is string && data.officerName.size() <= 150))
+        && (!('verificationStatus' in data) || (data.verificationStatus is string && data.verificationStatus.size() <= 100))
+        && (!('ip' in data) || (data.ip is string && data.ip.size() <= 100))
+        && (!('platform' in data) || (data.platform is string && data.platform.size() <= 200))
+        && (!('created_at' in data) || (data.created_at is string && data.created_at.size() <= 100))
+        && (!('timestamp' in data) || (data.timestamp is string && data.timestamp.size() <= 100) || data.timestamp is timestamp)
+        && (!('serverTime' in data) || data.serverTime is timestamp);
+    }
+
+    // Investigation Cases Validator
+    function isValidCaseRecord(data) {
+      return data.size() > 0 && data.size() <= 50
+        && (!('case_name' in data) || (data.case_name is string && data.case_name.size() <= 200))
+        && (!('status' in data) || (data.status is string && data.status.size() <= 50))
+        && (!('case_id' in data) || data.case_id is string || data.case_id is int)
+        && (!('created_at' in data) || data.created_at is string || data.created_at is timestamp)
+        && (!('last_updated' in data) || data.last_updated is timestamp || data.last_updated is string);
+    }
+
+    // Suspect Dossier Notes Validator
+    function isValidNoteRecord(data) {
+      return data.keys().hasAll(['suspect_number', 'note_text', 'officer_badge'])
+        && isValidString(data.suspect_number, 1, 64)
+        && isValidString(data.note_text, 1, 10000)
+        && isValidString(data.officer_badge, 1, 64)
+        && (!('case_id' in data) || data.case_id is int || data.case_id is string || data.case_id is float)
+        && (!('created_at' in data) || (data.created_at is string && data.created_at.size() <= 100))
+        && (!('timestamp' in data) || data.timestamp is timestamp || (data.timestamp is string && data.timestamp.size() <= 100));
+    }
+
+    // =========================================================================
+    // COLLECTION RULES
+    // =========================================================================
+
+    // 1. Forensic Audit Trail
+    // Mandatory Section 65B Indian Evidence Act Compliance:
+    // Append-only, tamper-evident forensic ledger.
+    // Reading and appending is restricted to authenticated officers.
+    // Modifying or deleting audit records is strictly prohibited.
+    match /forensic_audit_trail/{logId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidAuditRecord(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    // 2. Investigation Cases
+    // Master case files and dossiers:
+    // Read, create, and update accessible to authenticated officers.
+    // Deletion strictly forbidden to preserve chain of custody and case integrity.
+    match /investigation_cases/{caseId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidCaseRecord(request.resource.data);
+      allow update: if isAuthenticated() && isValidCaseRecord(request.resource.data);
+      allow delete: if false;
+    }
+
+    // 3. Suspect Dossier Notes
+    // Investigative notes attached to suspect profiles:
+    // Authenticated officers can read and create notes with mandatory metadata.
+    // Updates require valid note structure and preserve immutable provenance fields.
+    // Deletion is strictly forbidden to protect evidentiary records.
+    match /suspect_dossier_notes/{noteId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidNoteRecord(request.resource.data);
+      allow update: if isAuthenticated()
+        && isValidNoteRecord(request.resource.data)
+        && request.resource.data.suspect_number == resource.data.suspect_number
+        && request.resource.data.officer_badge == resource.data.officer_badge;
+      allow delete: if false;
+    }
+
+    // 4. Default Catch-All: Zero-trust default deny for all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
